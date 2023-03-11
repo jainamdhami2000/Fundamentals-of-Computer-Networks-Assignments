@@ -1,0 +1,40 @@
+python dns_resolver_part_a.py wikipedia.org A
+
+QUESTION SECTION:
+wikipedia.org  IN  A
+
+ANSWER SECTION:
+wikipedia.org  IN  A   208.80.154.224
+
+Query time 0.0000000000s
+WHEN 2022-09-21 06:33:40.263756
+MSG SIZE rcvd:  88
+
+
+------------------------------------------------------
+
+python dns_resolver_part_a.py wikipedia.org MX
+
+QUESTION SECTION:
+wikipedia.org  IN  MX
+
+ANSWER SECTION:
+wikipedia.org  IN  MX   10 mx1001.wikimedia.org.
+
+Query time 0.0000000000s
+WHEN 2022-09-21 06:34:34.912574
+MSG SIZE rcvd:  88
+
+------------------------------------------------------
+
+python dns_resolver_part_a.py wikipedia.org NS
+
+QUESTION SECTION:
+wikipedia.org  IN  NS
+
+ANSWER SECTION:
+wikipedia.org  IN  NS   ns0.wikimedia.org.
+
+Query time 0.0156250000s
+WHEN 2022-09-21 06:35:13.799386
+MSG SIZE rcvd:  88

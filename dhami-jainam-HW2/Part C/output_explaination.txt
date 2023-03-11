@@ -1,0 +1,53 @@
+Part C 1
+The answer to this section will be found in output.txt
+----------------------------------------------------------------------------------------------------
+
+Part C 2
+For file name http_1080.pcap
+The total number of TCP connections/flows are 17
+The number of connections for post 1080 is same as the number of GET requests. Hence we can say that the protocol used here is HTTP/1.0. This can also be checked in the output.txt file where we can see HTTP/1.0 in the response section.
+
+For file name tcp_1081.pcap
+The total number of TCP connections/flows are 6
+Here we see that the number of (for port 1081) have decreased to 6, implying that it must be using HTTP/1.1 using which we can reduce the number of persistent connections by doing parallelization of requests, which depends on the browser used (Usually the number of parallel connections is 6 which is true in case of most of the browsers).
+
+For file name tcp_1082.pcap
+The total number of TCP connections/flows are 1
+Here we see the number of connections (for port 1082) as 1, implying that the protocol used is HTTP/2.0 which has the capability to send all the objects using 1 connection by using pipelining.
+
+----------------------------------------------------------------------------------------------------
+
+Part C 3
+
+For file name http_1080.pcap, HTTP/1.0 is used
+The total time taken is 0.28766 s
+The total packets transferred are 1911
+The raw data size is 2272224 Bytes
+
+For file name tcp_1081.pcap, HTTP/1.1 is used
+The total time taken is 0.262374 s
+The total packets transferred are 1824
+The raw data size is 2283152 Bytes
+
+For file name tcp_1082.pcap, HTTP/2.0 is used
+The total time taken is 1.91198 s
+The total packets transferred are 1741
+The raw data size is 2293457 Bytes
+
+For my captured packets the observation is as follows:
+
+The site loaded the fastest under HTTP/1.1 protocol
+The site loaded the slowest under HTTP/2.0 protocol
+
+The loading of the site was the fastest under HTTP/1.1 protocol as it allows parallelization of requests which reduces the time taken as we reduce the number of persistent connections which is generally 6 for most of the browsers.
+
+The loading of the site was the slowest for HTTP/2.0 as though it uses pipelining, because of the additional TLS request in HTTP/2.0 it adds to an additional RTT which would have resulted in an increased time
+
+The site sent most number of packets under HTTP/1.0 protocol
+The site sent least number of packets under HTTP/2.0 protocol
+The site sent most number of raw bytes under HTTP/2.0 protocol
+The site sent least number of raw bytes under HTTP/1.0 protocol
+
+The reason for this happening could be the small size of the packets sent via HTTP/1.0 than the size of packets sent via HTTP/2.0 
+
+

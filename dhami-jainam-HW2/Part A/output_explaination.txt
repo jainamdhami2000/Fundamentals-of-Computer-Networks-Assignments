@@ -1,0 +1,159 @@
+Part A 1
+
+The Number of Flows initiated by the Sender is 3. And the respective flows and the total number of packets in each flow are: 
+43498 -> 80 Number of packets: 11106
+43500 -> 80 Number of packets: 11834
+43502 -> 80 Number of packets: 1185
+
+We calculate the number of TCP flows by calculating the number of syn packets. The syn packet is indicative of an initiation 
+of a new connection or flow. So the number of syn packets would be the total number of flows. 
+
+Part A 2(a)
+-----------------------------------------------------------------------
+
+Flow 1 : 43498 --> 80
+
+Trnsaction 1
+
+Sender to receiver (SRC_IP : 130.245.145.12 -> DEST_IP : 128.208.2.198)
+The Sequence Number is 705669103 
+ACK Number is 1921750144 
+Receive Window Size is 3
+
+Receiver to Sender (SRC_IP : 130.245.145.12 -> DEST_IP : 128.208.2.198)
+The Sequence Number is 1921750144 
+ACK Number is 705669127 
+Receive Window Size is 3
+
+Trnsaction 2
+
+Sender to receiver (SRC_IP : 130.245.145.12 -> DEST_IP : 128.208.2.198)
+The Sequence Number is 705669127 
+ACK Number is 1921750144 
+Receive Window Size is 3
+
+Receiver to Sender (SRC_IP : 130.245.145.12 -> DEST_IP : 128.208.2.198)
+The Sequence Number is 1921750144 
+ACK Number is 705670575 
+Receive Window Size is 3
+
+-----------------------------------------------------------------------
+
+Flow 2 : 43500 --> 80
+
+Trnsaction 1
+
+Sender to receiver (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 3636173852 
+ACK Number is 2335809728 
+Receive Window Size is 3
+
+Receiver to Sender (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 2335809728 
+ACK Number is 3636173876 
+Receive Window Size is 3
+
+Trnsaction 2
+
+Sender to receiver (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 3636173876 
+ACK Number is 2335809728 
+Receive Window Size is 3
+
+Receiver to Sender (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 2335809728 
+ACK Number is 3636175324 
+Receive Window Size is 3
+
+-----------------------------------------------------------------------
+
+Flow 3 : 43502 --> 80
+
+Trnsaction 1
+
+Sender to receiver (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 2558634630 
+ACK Number is 3429921723 
+Receive Window Size is 3
+
+Receiver to Sender (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 3429921723 
+ACK Number is 2558634654 
+Receive Window Size is 3
+
+Trnsaction 2
+
+Sender to receiver (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 2558634654 
+ACK Number is 3429921723 
+Receive Window Size is 3
+
+Receiver to Sender (SRC_IP : 128.208.2.198 -> DEST_IP : 130.245.145.12)
+The Sequence Number is 3429921723 
+ACK Number is 2558636102 
+Receive Window Size is 3
+
+
+Here I first calculated the index of the packet after the three-way handshake and then printed the first two transactions after that point. Here we can see that the acknowledgement number of packets sent from sender to receiver is equal to the acknowledgment number of the packets sent from receiver to sender. This is indicative of the fact that the when the sender sends packet to the receiver it stored the next expected sequence number as the acknowledgement number for which the receiver packet then sends the packet with expected sequence number to the sender, completing a transaction.
+-----------------------------------------------------------------------
+Part A 2(b) 
+The Throughput for Flow 1 (43498 -> 80) is 5251391.112913 (5.251391 MBps)
+The Throughput for Flow 2 (43500 -> 80) is 1285420.726826 (1.285421 MBps)
+The Throughput for Flow 3 (43502 -> 80) is 1481506.384826 (1.481506 MBps)
+
+To estimate the throughput, I calculated the total payload and divided it by the time difference of the first packet and the 
+last packet from source to destination
+-----------------------------------------------------------------------
+Part A 2(c) 
+In Flow 1 (43498 -> 80), the number of packets lost is 3
+the total number of packets sent by the sender is 6977
+The loss rate is 0.00043
+
+In Flow 2 (43500 -> 80), the number of packets lost is 94
+the total number of packets sent by the sender is 7068
+The loss rate is 0.0132994
+
+In Flow 3 (43502 -> 80), the number of packets lost is 0
+the total number of packets sent by the sender is 729
+The loss rate is 0.0
+
+I keep track of how frequently a packet with the same sequence number is transferred from sender to receiver to compute loss. 
+Multiple sequence numbers indicate that the packet was lost and must be resent. Total loss is the sum of all packets that are 
+sent and received again. Now by dividing the total loss by total number of packets sent by the sender I get the Loss rate.
+-----------------------------------------------------------------------
+Part A 2(d) 
+In Flow 1 (43498 -> 80), the average RTT is 0.07264 s
+The Theoretical throughput for the above Flow is 1187120.879829 (1.187121 MBps)
+
+In Flow 2 (43500 -> 80), the average RTT is 0.072588 s
+The Theoretical throughput for the above Flow is 213607.998877 (0.213608 MBps)
+
+In Flow 3 (43502 -> 80), the average RTT is 0.074484 s
+The Theoretical throughput for the above Flow is infinity
+
+
+For calculating the estimated RTT we use the formula
+Estimated RTT = (ALPHA * Estimated RTT) + (1 - ALPHA) * Previous RTT
+Here we take ALPHA as 0.125
+Here I have used Counter to get the payload which has occurred the maximum number of times among all the packets since the 
+number of packets having payload other than the maximum one is so small that it can be neglected.
+To calculate the RTT we create dictionaries with sequence and acknowledgement number as keys and the respective timestamps as 
+values. Now we add the value of payload to the sequence number to get the acknowledgement number and then use the above formula 
+of Estimated RTT.
+
+By comparing we find that the theoretical throughput is less than the actual throughput.
+The TCP option known as Maximum Segment Size (MSS) determines the biggest segment that the local host will accept.
+To find the MMS values and frequencies of all the packets, I use Python Counter in the code. MSS values are seen to be either 
+2058 or 1460.
+Since that is the maximum segment size for the receiver host, we take the lower of the two values into consideration and set it 
+as the MSS.
+The theoretical throughput is calculated using the formula:
+Throughput = (squareroot(3/2) * 1 MSS) / (squareroot(l) * RTT) 
+where, 
+l = loss rate,
+RTT = Avg Round trip time calculated in Part A 2(d)
+MSS = calculated in code (1460)
+
+When applying the above throughput formula, we need a loss rate of 6.834*10-5, or one loss event every 14632 segments, to reach 
+the empirical 5.25 MBps in the first flow. However, the first flow only contains 11,106 segments. Therefore, it is impossible to 
+reach the empirical throughput using the formula.

@@ -1,0 +1,53 @@
+Part B 1 
+
+The size of the congestion window can be determined at either end, the sender or the receiver.
+The reason being that during the transmission of data or packets, both the receiver and the sender retain a specific buffer size.
+The window size is reduced when a packet is lost, which is identified by the ack from the receiving end to the sender end.
+The frequency and accuracy of the anticipated ack response to the sender determines how large the congestion window will expand. The size of the window keeps growing until a previously sent packet's ack is either not received within two RTTs or an unexpected ack is received.
+Here I am calculating congestion window per RTT by 1st taking the difference in timestamp of the SYN and SYN-ACK packets. I am considering this as the RTT for congestion window calculation which for all the three flows is 73 milli seconds. Now I count the cumulative packet size of all the that are packets sent within that RTT from sender to the receiver and later repeat this process for the next packets. Here we print first ten congestion window sizes while doing this process and also calculate the rate at which the congestion window grows with respect to the previous window.
+
+In Flow 1 (43498 -> 80)
+The First 10 Congestion Window are: [16834, 30280, 62074, 72672, 105980, 160484, 218016, 302800, 425434, 637394]
+The Growth Rate of Congestion window is: [1.7987, 2.05, 1.1707, 1.4583, 1.5143, 1.3585, 1.3889, 1.405, 1.4982]
+
+Here the initial congestion window is 16834 (total size of 13 packets) and we can also see that the congestion window increases by some factor every time and that factor can be seen above.
+This means that between the timestamp of sending the 1st packet and the timestamp received after adding 1 RTT to the former timestamp, 13 packets of total size 16834 were sent.
+
+In Flow 2 (43500 -> 80)
+The First 10 Congestion Window are: [13806, 33308, 49962, 68130, 98410, 154428, 204390, 328538, 434518, 616198]
+The Growth Rate of Congestion window is: [2.4126, 1.5, 1.3636, 1.4444, 1.5692, 1.3235, 1.6074, 1.3226, 1.4181]
+
+Here the initial congestion window is 13806 (total size of 11 packets) and we can also see that the congestion window increases by some factor every time and that factor can be seen above.
+This means that between the timestamp of sending the 1st packet and the timestamp received after adding 1 RTT to the former timestamp, 11 packets of total size 13806 were sent.
+
+In Flow 3 (43502 -> 80)
+The First 10 Congestion Window are: [28946, 65102, 92354, 139288, 137774, 274034, 359108]
+The Growth Rate of Congestion window is: [2.2491, 1.4186, 1.5082, 0.9891, 1.989, 1.3105]
+
+This flow does not encounter a loss event. And we can also see that the 7th window size is smaller than the 6th window. This is because the flow ends before the congestion window could grow more to reach its maximum size.
+Here the initial congestion window is 28946 (total size of 21 packets) and we can also see that the congestion window increases by some factor every time and that factor can be seen above.
+This means that between the timestamp of sending the 1st packet and the timestamp received after adding 1 RTT to the former timestamp, 21 packets of total size 28946 were sent.
+
+
+I also observed that for the 11th congestion window its size almost halved for the 1st two flows to 328538 and 396668 respectively as there was a timeout in the 11th RTT indicating a loss due to congestion. 
+
+-----------------------------------------------------------------------
+Part B 2 
+
+I have first calculated the total number of retransmissions i.e the total number of lost packets. Loss of packets can happen in two ways that is due to retransmission timeout and triple duplicate ack. I have then found the number of triple duplicate acks. I found Triple duplicate ack by counting the number of packets received which have the same acknowledgement number. When this count gets greater than 2 we increment the count of Triple Duplicate Ack. Using these values I was later able to compute loss due to timeout as:
+Loss due to timeout = total packets lost - number of triple duplicate ack
+
+I am calculating all the above mentioned values from the sender's side
+
+In Flow 3 (43498 -> 80), the total duplicate packets retransmitted is 3
+The number of packets retransmitted due to Triple Duplicate Ack is 2
+the number of times a retransmission occurred due to timeout is 1
+
+In Flow 3 (43500 -> 80), the total duplicate packets retransmitted is 94
+The number of packets retransmitted due to Triple Duplicate Ack is 36
+the number of times a retransmission occurred due to timeout is 58
+
+In Flow 3 (43502 -> 80), the total duplicate packets retransmitted is 0
+The number of packets retransmitted due to Triple Duplicate Ack is 0
+the number of times a retransmission occurred due to timeout is 0
+
